@@ -58,7 +58,6 @@ class _MyHomePageState extends State<MyHomePage> {
             return FloatingActionButton(
               onPressed:(){
                 _orderBookBloc.add(ClearOrderBook());
-
                 _searchBloc.add(TextSearched(searchString: _textController.text),);
               },
               tooltip: 'refresh',
