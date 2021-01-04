@@ -5,14 +5,11 @@ import 'package:flutter_currency/bloc/orderbook_bloc/orderbook_event.dart';
 import 'package:flutter_currency/bloc/search_bloc/search_bloc.dart';
 import 'package:flutter_currency/bloc/search_bloc/search_event.dart';
 import 'package:flutter_currency/bloc/search_bloc/search_state.dart';
-
-import 'package:flutter_currency/common/app_colors.dart';
 import 'package:flutter_currency/common/strings.dart';
 import 'package:flutter_currency/common/util.dart';
 import 'package:flutter_currency/data/local_data.dart';
 import 'package:flutter_currency/widgets/currency_loading.dart';
 import 'package:flutter_currency/widgets/initial_search_widget.dart';
-import 'package:skeleton_loader/skeleton_loader.dart';
 
 import 'order_book.dart';
 
@@ -24,6 +21,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 OrderBookBloc _orderBookBloc;
+// bool searchCalled = false;
 class _MyHomePageState extends State<MyHomePage> {
 
   @override
@@ -36,6 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -52,20 +51,27 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed:(){
-          // _orderBookBloc.add(GetOrderBook(searchString: _textController.text));
-          _orderBookBloc.add(ClearOrderBook());
-          _searchBloc.add(
-            TextSearched(searchString: _textController.text),
-          );
+
+      floatingActionButton: BlocBuilder<SearchBloc, SearchState>(
+        builder: (context, state) {
+          if (state is SearchStateSuccess) {
+            return FloatingActionButton(
+              onPressed:(){
+                _orderBookBloc.add(ClearOrderBook());
+                _searchBloc.add(TextSearched(searchString: _textController.text),);
+              },
+              tooltip: 'refresh',
+              child: Icon(
+                Icons.autorenew,
+                color: Colors.white,
+              ),
+            );
+          }else{
+            return new Container();
+          }
+          return const Text('');
         },
-        tooltip: 'refresh',
-        child: Icon(
-          Icons.autorenew,
-          color: Colors.white,
-        ),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ) , // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
