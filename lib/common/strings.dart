@@ -7,6 +7,7 @@ class Strings{
   static const String order_book='Order Book';
   static const String volume='Volume';
   static const String view_order_book='View Order Book';
+  static const String hide_order_book='Hide Order Book';
   static const String open='Open';
   static const String high='High';
   static const String low='Low';

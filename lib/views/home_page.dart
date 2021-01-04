@@ -144,6 +144,7 @@ class _CurrencyData extends StatefulWidget {
 }
 
 class _CurrencyDataState extends State<_CurrencyData> {
+  bool viewOderBook=true;
   @override
   void initState() {
     super.initState();
@@ -318,13 +319,21 @@ class _CurrencyDataState extends State<_CurrencyData> {
   Widget _viewOrderBook(){
     return GestureDetector(
       onTap: (){
-        _orderBookBloc.add(GetOrderBook(searchString: _textController.text));
+        if(viewOderBook){
+          _orderBookBloc.add(GetOrderBook(searchString: _textController.text));
+        }else{
+          _orderBookBloc.add(ClearOrderBook());
+        }
+        setState(() {
+          viewOderBook = !viewOderBook;
+        });
+
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         padding:const EdgeInsets.all(5),
-        child: Text(
-          Strings.view_order_book.toUpperCase(),
+        child: Text(viewOderBook?
+          Strings.view_order_book.toUpperCase():Strings.hide_order_book.toUpperCase(),
           style: TextStyle(
             color: Colors.deepPurpleAccent,
             fontSize: 14,
